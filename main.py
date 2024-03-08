@@ -5,8 +5,6 @@ import boto3
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-# endpoint_name = "huggingface-pytorch-tgi-inference-2024-03-06-05-50-57-978"
-endpoint_name = "jumpstart-dft-hf-llm-mistral-7b-instruct"
 
 app = FastAPI()
 load_dotenv()
@@ -36,6 +34,7 @@ def generate_response(payload):
     aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
     aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
     region = os.getenv("REGION")
+    endpoint_name = os.getenv("ENDPOINT")
 
     client = boto3.client(
         "runtime.sagemaker",
