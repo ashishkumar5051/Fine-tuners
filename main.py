@@ -4,8 +4,6 @@ import json
 import boto3
 from pydantic import BaseModel
 from dotenv import load_dotenv
-import gradio as gr
-
 
 app = FastAPI()
 load_dotenv()
@@ -14,7 +12,7 @@ load_dotenv()
 class Data(BaseModel):
     question: str
     max_new_tokens: int = 50
-    temperature: float = 0.3
+    temperature: float = 0.7
 
 
 @app.post("/v1/chat/completions")
@@ -22,7 +20,7 @@ def index(data: Data):
 
     max_new_tokens = data.max_new_tokens if hasattr(
         data, 'max_new_tokens') else 50
-    temperature = data.temperature if hasattr(data, 'temperature') else 0.3
+    temperature = data.temperature if hasattr(data, 'temperature') else 0.7
 
     prompt = {
         "inputs": data.question,
@@ -55,20 +53,3 @@ def generate_response(payload):
     generated_text = model_predictions[0]["generated_text"]
 
     return generated_text
-
-
-def greet(question, max_token, temperature):
-    max_new_tokens = max_token if max_token else 50
-    temperature = temperature if temperature else 0.5
-
-    prompt = {
-        "inputs": question,
-        "parameters": {"max_new_tokens": max_new_tokens, "temperature": temperature},
-    }
-    response = generate_response(prompt)
-    return response
-
-
-demo = gr.Interface(fn=greet, inputs=["text",  gr.Slider(
-    0, 500, value=50), gr.Slider(0, 1, step=0.10, value=0.7)], outputs="text")
-demo.launch()
