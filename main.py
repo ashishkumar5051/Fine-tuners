@@ -5,7 +5,6 @@ import boto3
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-
 app = FastAPI()
 load_dotenv()
 
@@ -13,14 +12,15 @@ load_dotenv()
 class Data(BaseModel):
     question: str
     max_new_tokens: int = 50
-    temperature: float = 0.3
+    temperature: float = 0.7
 
 
 @app.post("/v1/chat/completions")
 def index(data: Data):
 
-    max_new_tokens = data.max_new_tokens if hasattr(data, 'max_new_tokens') else 50
-    temperature = data.temperature if hasattr(data, 'temperature') else 0.3
+    max_new_tokens = data.max_new_tokens if hasattr(
+        data, 'max_new_tokens') else 50
+    temperature = data.temperature if hasattr(data, 'temperature') else 0.7
 
     prompt = {
         "inputs": data.question,
